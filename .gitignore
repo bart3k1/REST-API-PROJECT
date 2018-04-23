@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+#charm & venv
+.idea/
+venvrest/
+
 # Distribution / packaging
 .Python
 env/

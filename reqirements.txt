@@ -1,0 +1,5 @@
+Django==2
+django-extensions==2.0.6
+mysql-connector==2.1.6
+mysql-connector-python==8.0.6
+

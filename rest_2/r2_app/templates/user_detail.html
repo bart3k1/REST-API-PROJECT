@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p></p>
+    <button onclick="goBack()">Wróć</button>
+
+    <h2>{{ object }}</h2>
+
+    {{ object.first_name }}<br>
+    {{ object.last_name }}<br>
+    {{ object.email }}<br>
+    Tel. {{ object.phone }}<br>
+    <p>
+        Dokumentacje:<br>
+        {% for object in object.documents.all|dictsortreversed:"id" %}
+            <a href="{% url 'document-detail' pk=object.id %}"><span
+                    class="glyphicon glyphicon-book"></span> {{ object.topic }}</a> |  <a href="{% url 'edition-detail' pk=object.edition.id %}"> {{ object.edition }} </a><br>
+        {% endfor %}
+    </p>
+
+
+    <button onclick="goBack()">Wróć</button>
+    <p></p>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+{% endblock %}

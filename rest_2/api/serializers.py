@@ -1,52 +1,51 @@
-# from cms.cms_body.models import User
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-# from cms_body.models import Guest
-from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+User = get_user_model()
 
 # Create your views here.
 
 
-User = get_user_model()
-
-
 class UsersSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
 
 
-class UserOLDSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
-
-    class Meta:
-        model = User
-        fields = ['id', 'email', 'password', 'token']
-
-
 class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+
+class LoginUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password"]
-        # fields = '__all__'
+        fields = ['email', 'password']
+        extra_kwargs = {'password':
+                            {'write_only': True}
+                        }
 
-
-
-
-
-
-class UserGetSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ["first_name", "last_name"]
-
-#
-# class GuestSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = Guest
-#         fields = ["id", "name", "surname", "phone", "alt_phone", "notes", "ocena"]
+    def validate(self, data):
+        user_obj = None
+        email = data.get("email", None)
+        password = data['password']
+        if not email:
+            raise ValidationError("No such user")
+        user = User.objects.filter(email=email)
+        if user.exists():
+            user_obj = user.first()
+        else:
+            raise ValidationError("Email not valid")
+        if user_obj:
+            if not user_obj.check_password(password):
+                raise ValidationError("Incorrect data")
+        return data

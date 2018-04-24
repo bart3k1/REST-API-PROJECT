@@ -30,9 +30,8 @@ ALLOWED_HOSTS = [
 
 ]
 
-
-AUTH_USER_MODEL = 'r2_app.User'
-
+# AUTH_USER_MODEL = 'r2_app.User'
+AUTHENTICATION_BACKENDS = ('r2_app.models.CustomBackend', )
 
 # Application definition
 
@@ -116,20 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#todo ogarnac to!!!
-# REST_FRAMEWORK = {
-#     # Use Django's standard `django.contrib.auth` permissions,
-#     # or allow read-only access for unauthenticated users.
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-#     ]
-# }
-#
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.DjangoModelPermissions',
-#     )
-# }
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.

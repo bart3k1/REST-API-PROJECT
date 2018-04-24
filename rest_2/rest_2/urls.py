@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from r2_app.views import LoggedUserView, RegisterUserView, UserLoginView, UserView
+from r2_app.views import (LoggedUserView, RegisterUserView, UserLoginView,
+                          UserView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+
 from r2_app.validators import validate_username
 
 
@@ -20,4 +21,3 @@ class RegisterUserForm(forms.Form):
         if password != password2:
             raise ValidationError("Passwords don't match")
         return password
-

@@ -1,9 +1,9 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model, login
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
+
 from r2_app.forms import LoginForm, RegisterUserForm
 
 User = get_user_model()
@@ -68,4 +68,3 @@ class LoggedUserView(View):
             'logged_user': logged_user,
         }
         return render(request, 'me.html', ctx)
-

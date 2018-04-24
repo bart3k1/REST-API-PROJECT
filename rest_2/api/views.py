@@ -1,10 +1,12 @@
-from rest_framework.generics import CreateAPIView
-from rest_framework.views import APIView
-from api.serializers import UsersSerializer, UserSerializer, RegisterUserSerializer, LoginUserSerializer
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework import status
 from django.contrib.auth import get_user_model
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.generics import CreateAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from api.serializers import (LoginUserSerializer, RegisterUserSerializer,
+                             UserSerializer, UsersSerializer)
 
 User = get_user_model()
 
@@ -47,4 +49,3 @@ class UserView(APIView):
         user = request.user
         serializer = UserSerializer(user, context={"request": request})
         return Response(serializer.data)
-

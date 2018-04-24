@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
@@ -7,6 +7,7 @@ from django.views.generic import ListView
 
 from r2_app.forms import LoginForm, RegisterUserForm
 
+User = get_user_model()
 
 # Create your views here.
 
@@ -42,8 +43,7 @@ class UserLoginView(View):
         form = LoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            #todo https://stackoverflow.com/questions/37332190/django-login-with-email
-            user = User.objects.get(email=email) # to zle
+            user = User.objects.get(email=email)
             password = form.cleaned_data['password']
             user = authenticate(username=user.username, password=password)
             if user:

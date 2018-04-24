@@ -31,6 +31,9 @@ ALLOWED_HOSTS = [
 ]
 
 
+AUTH_USER_MODEL = 'r2_app.User'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,6 +46,8 @@ INSTALLED_APPS = [
     'r2_app',
     'api',
     'rest_framework',
+    'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [

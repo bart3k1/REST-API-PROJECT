@@ -7,17 +7,14 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 
-# User = get_user_model()
+User = get_user_model()
 
 
 class UsersSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name']
+        fields = ['id', 'username', 'email']
 
 
 class UserOLDSerializer(serializers.ModelSerializer):
@@ -33,8 +30,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        # fields = ["id", "name", "surname", "phone", "alt_phone", "notes", "ocena"]
-        fields = '__all__'
+        fields = ["username", "email", "password"]
+        # fields = '__all__'
 
 
 

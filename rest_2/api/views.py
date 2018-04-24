@@ -1,21 +1,26 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from rest_framework import status
+from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from api.serializers import UsersSerializer, UserSerializer, UserOLDSerializer  # GuestSerializer, UserGetSerializer
-from django.contrib.auth import get_user_model
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
-from rest_framework.renderers import TemplateHTMLRenderer
+from api.serializers import UsersSerializer, UserSerializer, UserOLDSerializer
 from rest_framework.viewsets import ModelViewSet
-from django.contrib.auth.models import User
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+from django.contrib.auth import get_user_model
 
-# Create your views here.
-# from cms_body.models import Guest
+User = get_user_model()
 
-# User = get_user_model()
+
+class RegisterUser(CreateAPIView):
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        token, created = Token.objects.get_or_create(user=serializer.instance)
+        return Response({'token': token.key}, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class UsersView(APIView):
@@ -24,21 +29,27 @@ class UsersView(APIView):
         serializer = UsersSerializer(users, many=True, context={"request": request})
         return Response(serializer.data)
 
-    def post(self, request, format=None):
-        pass
-
 
 class UserView(APIView):
     def get(self, request, format=None):
         user = request.user
-        token, created = Token.objects.get_or_create(user=user)
-        # serializer = UsersSerializer(user, context={"request": request})
         return Response({
             'user_id': user.id,
             'email': user.email,
-            'token': token.key,
+            'username': user.username,
         })
-        # return Response(serializer.data)
+
+
+
+# class LoginUser(LoginAPIView):
+#     pass
+
+
+
+
+
+
+
 
 
 class UserLoginView(APIView):

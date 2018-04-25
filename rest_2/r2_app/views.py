@@ -1,6 +1,6 @@
-from django.contrib.auth import authenticate, get_user_model, login
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView
 
@@ -54,6 +54,12 @@ class UserLoginView(View):
             'form': form,
         }
         return render(request, 'login_form.html', ctx)
+
+
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
 
 class UserView(ListView):

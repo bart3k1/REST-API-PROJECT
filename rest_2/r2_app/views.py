@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -7,6 +8,7 @@ from django.views.generic import ListView
 from r2_app.forms import LoginForm, RegisterUserForm
 
 User = get_user_model()
+
 
 # Create your views here.
 

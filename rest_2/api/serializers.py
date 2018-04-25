@@ -5,6 +5,7 @@ from rest_framework.validators import UniqueValidator
 
 User = get_user_model()
 
+
 # Create your views here.
 
 
@@ -45,7 +46,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 
 class LoginUserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ['email', 'password']

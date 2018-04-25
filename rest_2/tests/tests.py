@@ -6,14 +6,13 @@ from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 
+
 # Create your tests here.
 
 
 class MyApiLoginTest(APITestCase):
     def setUp(self):
-        # Create some user
         self.test_user = User.objects.create_user('testuser', 'test@example.com', 'testpassword')
-        # URL for api-creating account.
         self.create_url = reverse('api-login')
 
     def test_login_user_with_email(self):
@@ -60,19 +59,15 @@ class MyApiLoginTest(APITestCase):
 
 class MyApiRegisterTest(APITestCase):
     def setUp(self):
-        # Create some user
         self.test_user = User.objects.create_user('testuser', 'test@example.com', 'testpassword')
-        # URL for api-creating account.
         self.create_url = reverse('api-register')
 
-    #create user and check token
     def test_create_user(self):
         data = {
             'username': 'foobar',
             'email': 'foobar@example.com',
             'password': 'somepassword'
         }
-
         response = self.client.post(self.create_url, data, format='json')
         user = User.objects.latest('id')
         token = Token.objects.get(user=user)

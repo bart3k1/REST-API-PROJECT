@@ -13,19 +13,20 @@ User = get_user_model()
 
 
 class NewUserRegister(APIView):
+    serializer_class = NewRegisterUserSerializer
+    permission_classes = (AllowAny,)
     """
     Creates the user.
     """
-
-    def post(self, request, format='json'):
-        serializer = UserSerializer(data=request.data)
+    def post(self, request, format=None):
+        serializer = NewRegisterUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             if user:
                 token = Token.objects.create(user=user)
                 json = serializer.data
                 json['token'] = token.key
-                return Response(json, status=status.HTTP_201_CREATED)
+                return Response({'token': token.key}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

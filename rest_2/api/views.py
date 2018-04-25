@@ -1,25 +1,22 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import (LoginUserSerializer, RegisterUserSerializer,
-                             UserSerializer, UsersSerializer, NewRegisterUserSerializer)
+                             UserSerializer, UsersSerializer)
 
 User = get_user_model()
 
 
-class NewUserRegister(APIView):
-    serializer_class = NewRegisterUserSerializer
+class RegisterUser(APIView):
+    serializer_class = RegisterUserSerializer
     permission_classes = (AllowAny,)
-    """
-    Creates the user.
-    """
+
     def post(self, request, format=None):
-        serializer = NewRegisterUserSerializer(data=request.data)
+        serializer = RegisterUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             if user:
@@ -28,20 +25,6 @@ class NewUserRegister(APIView):
                 json['token'] = token.key
                 return Response({'token': token.key}, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class RegisterUser(CreateAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = RegisterUserSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
-            token, created = Token.objects.get_or_create(user=serializer.instance)
-            return Response({'token': token.key}, status=status.HTTP_201_CREATED, headers=headers)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

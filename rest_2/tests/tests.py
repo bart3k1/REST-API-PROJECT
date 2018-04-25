@@ -15,7 +15,7 @@ class MyApiTest(APITestCase):
         self.test_user = User.objects.create_user('testuser', 'test@example.com', 'testpassword')
 
         # URL for creating an account.
-        self.create_url = reverse('newregister')
+        self.create_url = reverse('api-register')
 
     def test_create_user(self):
         """

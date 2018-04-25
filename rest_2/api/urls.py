@@ -1,12 +1,12 @@
 from django.conf.urls import url
-from api.views import LoginUser, RegisterUser, UsersView, UserView, NewUserRegister
+from api.views import LoginUser, RegisterUser, UsersView, UserView
 
 urlpatterns = [
 
-    url(r'^users/$', UsersView.as_view(), name='usersX'),
-    url(r'^users/me/$', UserView.as_view(), name='me'),
-    url(r'^register/$', RegisterUser.as_view(), name='register'),
-    url(r'^login/$', LoginUser.as_view(), name='login'),
-    url(r'^newregister/$', NewUserRegister.as_view(), name='newregister'),
+    url(r'^users/$', UsersView.as_view(), name='api-users'),
+    url(r'^users/me/$', UserView.as_view(), name='api-me'),
+    url(r'^register/$', RegisterUser.as_view(), name='api-register'),
+    url(r'^login/$', LoginUser.as_view(), name='api-login'),
+
 
 ]

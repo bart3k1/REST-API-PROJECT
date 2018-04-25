@@ -8,7 +8,19 @@ User = get_user_model()
 # Create your views here.
 
 
-class NewRegisterUserSerializer(serializers.ModelSerializer):
+class UsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
@@ -30,24 +42,6 @@ class NewRegisterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
-
-
-class UsersSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
-
-
-class RegisterUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password']
 
 
 class LoginUserSerializer(serializers.ModelSerializer):

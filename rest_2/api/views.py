@@ -43,7 +43,7 @@ class LoginUser(APIView):
 
 
 class UsersView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = UsersSerializer(users, many=True, context={"request": request})
@@ -51,7 +51,7 @@ class UsersView(APIView):
 
 
 class UserView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     def get(self, request, format=None):
         user = request.user
         serializer = UserSerializer(user, context={"request": request})

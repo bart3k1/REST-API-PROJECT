@@ -9,18 +9,64 @@ User = get_user_model()
 # Create your tests here.
 
 
-class MyApiTest(APITestCase):
+class MyApiLoginTest(APITestCase):
     def setUp(self):
-        # We want to go ahead and originally create a user.
+        # Create some user
         self.test_user = User.objects.create_user('testuser', 'test@example.com', 'testpassword')
+        # URL for api-creating account.
+        self.create_url = reverse('api-login')
 
-        # URL for creating an account.
+    def test_login_user_with_email(self):
+        data = {
+            'email': 'test@example.com',
+            'password': 'testpassword'
+        }
+
+        response = self.client.post(self.create_url, data, format='json')
+        user = User.objects.get(username='testuser')
+        token = Token.objects.get(user=user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['token'], token.key)
+        self.assertFalse('password' in response.data)
+
+    def test_login_user_with_no_password(self):
+        data = {
+            'email': 'test@example.com',
+            'password': ''
+        }
+
+        response = self.client.post(self.create_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_login_user_with_no_email(self):
+        data = {
+            'email': '',
+            'password': 'testpassword'
+        }
+
+        response = self.client.post(self.create_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_login_user_with_wrong_password(self):
+        data = {
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password': 'XXXXX'
+        }
+
+        response = self.client.post(self.create_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class MyApiRegisterTest(APITestCase):
+    def setUp(self):
+        # Create some user
+        self.test_user = User.objects.create_user('testuser', 'test@example.com', 'testpassword')
+        # URL for api-creating account.
         self.create_url = reverse('api-register')
 
+    #create user and check token
     def test_create_user(self):
-        """
-        Ensure we can create a new user and a valid token is created with it.
-        """
         data = {
             'username': 'foobar',
             'email': 'foobar@example.com',
@@ -32,8 +78,6 @@ class MyApiTest(APITestCase):
         token = Token.objects.get(user=user)
         self.assertEqual(User.objects.count(), 2)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # self.assertEqual(response.data['username'], data['username'])
-        # self.assertEqual(response.data['email'], data['email'])
         self.assertEqual(response.data['token'], token.key)
         self.assertFalse('password' in response.data)
 

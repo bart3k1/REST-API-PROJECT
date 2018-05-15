@@ -1,1 +1,2 @@
-# r2-rest-moje
+Django Rest Framework API endpoints
+login/logout/users/
